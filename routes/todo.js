@@ -3,22 +3,18 @@ const router = express.Router()
 
 const {verificarAuth, verificarAdministrador } = require('../middlewares/auth')
 
-// Importar el modelo nota
 import Todo from '../models/todo.js'
 
 // agregar una nota
 router.post('/new-todo', verificarAuth , async (req, res) => {
   // 'req' es lo que envias 'res' es lo que responde el servidor
   const body = req.body
-  // console.log('req from todo routes: ', req)
-  // console.log('req.body from routes/ new-todo : ', req.body)
-  // console.log('req.usuario: ', req.usuario)
-  // console.log('2: ', req.usuarioId)
+  
   /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
   se almacena de esta forma porque con esa info vamos a filtrar
   las notas por usuario
   */
-  //  aqio el _id viene del token que se genera en ./middleware/auth.js
+  //  _id viene del token que se genera en ./middleware/auth.js
   
   body.userId = req.user
   console.log('userId: ', body.userId)
