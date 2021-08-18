@@ -10,10 +10,7 @@ import Todo from '../models/todo.js'
 router.post('/new-todo', verificarAuth, async (req, res) => {
   // 'req' es lo que envias 'res' es lo que responde el servidor
   const body = req.body
-  // console.log('req from todo routes: ', req)
-  // console.log('req.body from routes/ new-todo : ', req.body)
-  // console.log('req.usuario: ', req.usuario)
-  // console.log('2: ', req.usuarioId)
+ 
   /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
   se almacena de esta forma porque con esa info vamos a filtrar
   las notas por usuario
@@ -26,8 +23,8 @@ router.post('/new-todo', verificarAuth, async (req, res) => {
   try {
     const notaDB = await Todo.create(body)
     console.log('nota db ', notaDB)
-    // El status 200 esta por defecto en Express so no se nesesita mandar
-    // res.status(200).json(notaDB)
+    // El status 200 esta por defecto en Express so no se nesesita mandar res.status(200).json(notaDB)
+    
     res.json(notaDB)
   } catch (error) {
     return res.status(500).json({

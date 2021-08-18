@@ -9,15 +9,15 @@ import fileUpload from 'express-fileupload'
 
 const app = express()
 
-const URI_LOCAL = process.env.URI_LOCAL
-// const URI_CLOUD = process.env.URI_CLOUD
+// const URI_LOCAL = process.env.URI_LOCAL
+const URI_CLOUD = process.env.URI_CLOUD
 
 const options = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
 }
-mongoose.connect(URI_LOCAL, options).then(
+mongoose.connect(URI_CLOUD, options).then(
   () => {
     console.log('conectado a Mongo DB')
   }, err => {
