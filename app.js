@@ -9,8 +9,8 @@ import fileUpload from 'express-fileupload'
 
 const app = express()
 
-// const URI_LOCAL = process.env.URI_LOCAL
-const URI_CLOUD = process.env.URI_CLOUD
+const URI_LOCAL = process.env.URI_LOCAL
+// const URI_CLOUD = process.env.URI_CLOUD
 
 const options = {
   useNewUrlParser: true,
