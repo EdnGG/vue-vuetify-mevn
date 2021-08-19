@@ -123,8 +123,23 @@ router.put('/nota/:id', async (req, res) => {
   }
 })
 
-// Put actualizar una nota
+// Put actualizar una nota en su duedate
 router.put('/nota/duedate/:id', async (req, res) => {
+  const _id = req.params.id
+  const body = req.body
+  try {
+    await Todo.findByIdAndUpdate(_id, body, { new: true })
+    res.json(null)
+  } catch (error) {
+    return res.status(400).json({
+      mensaje: 'can not find the Id provided',
+      error
+    })
+  }
+})
+
+// Put actualizar una nota en su propieddad done
+router.put('/nota/done/:id', async (req, res) => {
   const _id = req.params.id
   const body = req.body
   try {
