@@ -19,6 +19,7 @@ const userSchema = new Schema({
   date: { type: Date, default: Date.now },
   role: { type: String, default: 'USER', enum: roles },
   active: { type: Boolean, default: true },
+  resetLink: { type: String, default: '' },
   google: {type: Boolean, default: false},
   image: { type: String, required: false }
 })
