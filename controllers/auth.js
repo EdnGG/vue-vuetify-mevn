@@ -167,6 +167,7 @@ const forgotPassword = async (req, res = Response) => {
             <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${token}</a>
             `
             }
+            
             {/* <a>${process.env.CLIENT_URL}/reset-password/${token}</a> */ }
 
             return userDB.updateOne({ resetLink: token }, (err, success) => {
