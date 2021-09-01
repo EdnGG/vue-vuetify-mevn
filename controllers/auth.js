@@ -73,16 +73,17 @@ const googleSignin = async (req, res = Response) => {
 }
 
 const resetPassword = async (req, res = Response) => {
+    // console.log('params: ', req.params)
+    // console.log('body: ', req.body)
 
-    const { resetLink, pass } = req.body;
+    const { resetLink, NewPass } = req.body;
     // const { email, newPass } = req.body;
-    // console.log('resetLink and newPass ', resetLink + ' ' + pass)
-    console.log('params: ', req.params)
+    console.log('resetLink and newPass ', resetLink + ' ' + NewPass)
 
 
     try {
         if (resetLink) {
-            jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
+            await jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
                 if (error) {
                     return res.status(401).json({
                         error: "Incorrect token or token expired"
@@ -164,7 +165,7 @@ const forgotPassword = async (req, res = Response) => {
                 subject: 'Reset password',
                 html: `
             <h2>Please click on the given link to reset your password</h2>
-            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${token}</a>
+            <a>${process.env.CLIENT_URL}/reset-password/${token}</a>
             `
             }
             
@@ -177,7 +178,7 @@ const forgotPassword = async (req, res = Response) => {
                     })
                 } else {
                     mg.messages().send(data, (error, body) => {
-                        console.log('Email body: ' + data)
+                        // console.log('Email body: ' , data)
                         if (error) {
                             return res.status(404).json({
                                 error: err.message
