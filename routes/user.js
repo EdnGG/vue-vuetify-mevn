@@ -114,59 +114,6 @@ router.post('/signup', async (req, res) => {
 router.put('/forgot-password', forgotPassword )
 
 // PUT  Reset password (reset-password)
-router.put('/reset-password/:token', resetPassword )
-
-// async (req, res) => {
-
-  // const body = {
-    // name: req.body.name,
-    // email: req.body.user.email,
-    // role: req.body.role,
-  // }
-
-  // const { email } = req.body 
-  // console.log("Body: " + req.body)
-  // Encriptando el password
-  // try {
-
-    // body.pass = bcrypt.hashSync(req.body.pass, saltRounds)
-
-    // if (!body.name && !req.body.pass && !body.email) {
-    //   return res.status(400).json({
-    //     message: 'Please fill up all fields correctly'
-    //   })
-    // }
-
-    // if (!body.name ) {
-    //   return res.status(400).json({
-    //     message: 'Name is required'
-    //   })
-    // }
-  
-    // if (!body.email) {
-    //   return res.status(400).json({
-    //     message: 'Email is required'
-    //   })
-    // }
-
-    // if (!req.body.pass) {
-    //   return res.status(400).json({
-    //     message: 'Password is required'
-    //   })
-    // }
-
-    // bcrypt.hashSync(req.body.pass, saltRounds)
-
-  // const userDB = await User.create(body)
-  //   res.json(userDB)
-
-  // } catch (err) {
-  //   return res.status(500).json({
-  //     message: 'Please fiil up all fields',
-  //     err
-  //   })
-  // }
-// })
-
+router.put('/reset-password/:resetLink', resetPassword )
 
 module.exports = router

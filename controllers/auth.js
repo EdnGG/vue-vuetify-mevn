@@ -1,11 +1,15 @@
 const { Response } = require('express');
 const bcryptjs = require('bcryptjs')
+const bcrypt = require('bcrypt')
 const mailgun = require('mailgun-js')
 // const mailgunLoader = require('mailgun-js')
 const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.js');
 const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
+
+// hash Password
+const saltRounds = 10
 
 // const { generarJWT } = require('../helpers/generar-jwt');
 const { googleVerify } = require('../helpers/google-verify');
@@ -73,17 +77,19 @@ const googleSignin = async (req, res = Response) => {
 }
 
 const resetPassword = async (req, res = Response) => {
-    // console.log('params: ', req.params)
-    // console.log('body: ', req.body)
+    console.log('params: ', req.params)
+    console.log('body: ', req.body)
 
-    const { resetLink, NewPass } = req.body;
+    // const { resetLink, newPass } = req.body;
+    const resetLink = req.body.resetLink;
+    const newPass = req.body.pass;
+    console.log('resetLink: ', resetLink)
+    console.log('newPass: ', newPass)
     // const { email, newPass } = req.body;
-    console.log('resetLink and newPass ', resetLink + ' ' + NewPass)
-
 
     try {
         if (resetLink) {
-            await jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
+            jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
                 if (error) {
                     return res.status(401).json({
                         error: "Incorrect token or token expired"
@@ -96,44 +102,19 @@ const resetPassword = async (req, res = Response) => {
                         })
                     }
 
-                    // 
-                    // const obj = {
-                    //     pass: newPass,
-                    //     resetLink: ''
-                    // }
-
-                    // userDB = _.extend(userDB, obj)
-                    // userDB.save((error, result) => {
-                    //     if (error) {
-                    //         return res.status(400).json({
-                    //             error: 'Reset password error'
-                    //         })
-                    //     }
-                    //     return res.status(200).json({
-                    //         message: 'Your password has been changed'
-                    //     })
-                    // })
-
-
-
-                    // console.log('userDB: ', userDB)
-                    // console.log('newPass: ', newPass)
-                    const salt = bcryptjs.genSaltSync(10);
-                    const hashPass = bcryptjs.hashSync(newPass, salt);
+                    const hashPass = bcrypt.hashSync(newPass, saltRounds);
                     userDB.pass = hashPass;
                     userDB.resetLink = '';
                     userDB.save();
-                    return res.json({
-                        msg: 'Password changed successfully!'
-                    })
                 })
+                return res.json({ message: 'Password changed successfully!' })
             })
         }
-
-        return res.status(404).json({ error: 'Authentication Error' })
+        // return res.json({ message: 'Password changed successfully!' })
 
     } catch (e) {
         console.log('Error: ', e);
+        return res.status(404).json({ error: 'Authentication Error' })
     }
 
 }
@@ -165,10 +146,10 @@ const forgotPassword = async (req, res = Response) => {
                 subject: 'Reset password',
                 html: `
             <h2>Please click on the given link to reset your password</h2>
-            <a>${process.env.CLIENT_URL}/reset-password/${token}</a>
+            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${token}</a>
             `
             }
-            
+
             {/* <a>${process.env.CLIENT_URL}/reset-password/${token}</a> */ }
 
             return userDB.updateOne({ resetLink: token }, (err, success) => {
