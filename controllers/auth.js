@@ -6,8 +6,8 @@ const mailgun = require('mailgun-js')
 const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.js');
-const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
-
+// const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
+const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN_CLOUD })
 // hash Password
 const saltRounds = 10
 
@@ -123,11 +123,6 @@ const forgotPassword = async (req, res = Response) => {
     const { email } = req.body;
     console.log('email: ', email)
 
-    // let mailGunn = mailgunLoader({
-    //     apiKey: process.env.MAILGUN_API_KEY,
-    //     domain: process.env.MAILGUN_DOMAIN
-    // })
-
     try {
 
         await User.findOne({ email }, (err, userDB) => {
@@ -149,8 +144,6 @@ const forgotPassword = async (req, res = Response) => {
             <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${token}</a>
             `
             }
-
-            {/* <a>${process.env.CLIENT_URL}/reset-password/${token}</a> */ }
 
             return userDB.updateOne({ resetLink: token }, (err, success) => {
                 if (err) {
