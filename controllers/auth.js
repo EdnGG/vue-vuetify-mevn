@@ -76,12 +76,67 @@ const googleSignin = async (req, res = Response) => {
     }
 }
 
+const forgotPassword = async (req, res = Response) => {
+    const { email } = req.body;
+    console.log('email: ', email)
+
+    try {
+
+        await User.findOne({ email }, (err, userDB) => {
+
+            if (err || !userDB) {
+                return res.status(404).json({
+                    msg: 'User not found!'
+                })
+            }
+
+            const token = jwt.sign({ _id: userDB._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' })
+            const formattingToken = token.replace(/["."]+/g, '_')
+
+            const data = {
+                from: 'noreply@hello.com',
+                to: email,
+                subject: 'Reset password',
+                html: `
+            <h2>Please click on the given link to reset your password</h2>
+            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${formattingToken}</a>
+            `
+            }
+
+            return userDB.updateOne({ resetLink: token }, (err, success) => {
+                if (err) {
+                    return res.status(404).json({
+                        error: 'Error sending reset password link!'
+                    })
+                } else {
+                    mg.messages().send(data, (error, body) => {
+                        // console.log('Email body: ' , data)
+                        if (error) {
+                            return res.status(404).json({
+                                error: err.message
+                            })
+                        }
+                        return res.json({ message: 'Reset password link sent!' })
+                    })
+                }
+            })
+        })
+
+    } catch (e) {
+        console.log(e);
+    }
+
+}
+
 const resetPassword = async (req, res = Response) => {
     console.log('params: ', req.params)
     console.log('body: ', req.body)
 
     // const { resetLink, newPass } = req.body;
-    const resetLink = req.body.resetLink;
+    // const originalToken = resetLink.replace(/["_"]+/g, '.');
+    const originalToken = req.body.resetLink;
+    // const resetLink = req.body.resetLink;
+    const resetLink = originalToken.replace(/["_"]+/g, '.');
     const newPass = req.body.pass;
     console.log('resetLink: ', resetLink)
     console.log('newPass: ', newPass)
@@ -89,6 +144,7 @@ const resetPassword = async (req, res = Response) => {
 
     try {
         if (resetLink) {
+            console.log('resetLink: ', resetLink)
             jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
                 if (error) {
                     return res.status(401).json({
@@ -119,56 +175,7 @@ const resetPassword = async (req, res = Response) => {
 
 }
 
-const forgotPassword = async (req, res = Response) => {
-    const { email } = req.body;
-    console.log('email: ', email)
 
-    try {
-
-        await User.findOne({ email }, (err, userDB) => {
-
-            if (err || !userDB) {
-                return res.status(404).json({
-                    msg: 'User not found!'
-                })
-            }
-
-            const token = jwt.sign({ _id: userDB._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' })
-
-            const data = {
-                from: 'noreply@hello.com',
-                to: email,
-                subject: 'Reset password',
-                html: `
-            <h2>Please click on the given link to reset your password</h2>
-            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${token}</a>
-            `
-            }
-
-            return userDB.updateOne({ resetLink: token }, (err, success) => {
-                if (err) {
-                    return res.status(404).json({
-                        error: 'Error sending reset password link!'
-                    })
-                } else {
-                    mg.messages().send(data, (error, body) => {
-                        // console.log('Email body: ' , data)
-                        if (error) {
-                            return res.status(404).json({
-                                error: err.message
-                            })
-                        }
-                        return res.json({ message: 'Reset password link sent!' })
-                    })
-                }
-            })
-        })
-
-    } catch (e) {
-        console.log(e);
-    }
-
-}
 
 module.exports = {
     googleSignin,

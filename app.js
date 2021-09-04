@@ -19,7 +19,7 @@ const options = {
 }
 mongoose.connect(URI_CLOUD, options).then(
   () => {
-    console.log('conectado a Mongo DB')
+    console.log('Connected to Mongo DB')
   }, err => {
     err
   } 
@@ -59,6 +59,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.set('Port', process.env.PORT || 3000)
 
 app.listen(app.get('Port'), () => {
-  console.log('port listeninig on: ', app.get('Port') )
+  console.log('Listeninig on port: ', app.get('Port') )
 })
 

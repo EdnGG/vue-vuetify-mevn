@@ -110,7 +110,7 @@ router.post('/signup', async (req, res) => {
   }
 })
 
-// PUT  Forgot password (reset-password)
+// PUT  Forgot password (forgot-password)
 router.put('/forgot-password', forgotPassword )
 
 // PUT  Reset password (reset-password)
