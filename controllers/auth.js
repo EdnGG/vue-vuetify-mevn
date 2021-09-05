@@ -94,7 +94,7 @@ const forgotPassword = async (req, res = Response) => {
             const formattingToken = token.replace(/["."]+/g, '_')
 
             const data = {
-                from: 'noreply@hello.com',
+                from: `noreply@vuetify-todo.com`,
                 to: email,
                 subject: 'Reset password',
                 html: `
