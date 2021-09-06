@@ -1,17 +1,14 @@
 const { Response } = require('express');
-const bcryptjs = require('bcryptjs')
 const bcrypt = require('bcrypt')
 const mailgun = require('mailgun-js')
-// const mailgunLoader = require('mailgun-js')
-const _ = require('lodash')
+// const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.js');
 // const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
 const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN_CLOUD })
+
 // hash Password
 const saltRounds = 10
-
-// const { generarJWT } = require('../helpers/generar-jwt');
 const { googleVerify } = require('../helpers/google-verify');
 
 const googleSignin = async (req, res = Response) => {
@@ -89,7 +86,7 @@ const forgotPassword = async (req, res = Response) => {
                     msg: 'User not found!'
                 })
             }
-
+            //  checar aqui
             const token = jwt.sign({ _id: userDB._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' })
             const formattingToken = token.replace(/["."]+/g, '_')
 
@@ -132,19 +129,24 @@ const resetPassword = async (req, res = Response) => {
     console.log('params: ', req.params)
     console.log('body: ', req.body)
 
-    // const { resetLink, newPass } = req.body;
     // const originalToken = resetLink.replace(/["_"]+/g, '.');
-    const originalToken = req.body.resetLink;
-    // const resetLink = req.body.resetLink;
-    const resetLink = originalToken.replace(/["_"]+/g, '.');
+
+    // checar
+    // const originalToken = req.body.resetLink;
+
+    const resetLink = req.body.resetLink;
+
+    // checar aqui
+    // const resetLink = originalToken.replace(/["_"]+/g, '.');
+
     const newPass = req.body.pass;
-    console.log('resetLink: ', resetLink)
-    console.log('newPass: ', newPass)
+    // console.log('resetLink limpio: ', resetLink)
+    // console.log('newPass: ', newPass)
     // const { email, newPass } = req.body;
 
     try {
         if (resetLink) {
-            console.log('resetLink: ', resetLink)
+            console.log('resetLink dentro del try /reset-password: ', resetLink)
             jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, (error, decodeData) => {
                 if (error) {
                     return res.status(401).json({
@@ -166,16 +168,12 @@ const resetPassword = async (req, res = Response) => {
                 return res.json({ message: 'Password changed successfully!' })
             })
         }
-        // return res.json({ message: 'Password changed successfully!' })
-
     } catch (e) {
         console.log('Error: ', e);
         return res.status(404).json({ error: 'Authentication Error' })
     }
 
 }
-
-
 
 module.exports = {
     googleSignin,
