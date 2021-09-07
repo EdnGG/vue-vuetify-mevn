@@ -140,8 +140,8 @@ const resetPassword = async (req, res = Response) => {
     // const resetLink = originalToken.replace(/["_"]+/g, '.');
 
     const newPass = req.body.pass;
-    // console.log('resetLink limpio: ', resetLink)
-    // console.log('newPass: ', newPass)
+    console.log('resetLink limpio: ', resetLink)
+    console.log('newPass: ', newPass)
     // const { email, newPass } = req.body;
 
     try {
