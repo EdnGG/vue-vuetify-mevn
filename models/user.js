@@ -21,7 +21,8 @@ const userSchema = new Schema({
   active: { type: Boolean, default: true },
   resetLink: { type: String, default: '' },
   google: {type: Boolean, default: false},
-  image: { type: String, required: false }
+  image: { type: String, required: false },
+  todos: { type: String, required: false }
 })
 
 /* { PATH } Sera reemplazado por el campo con el atributo 'unique' declarado

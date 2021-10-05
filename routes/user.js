@@ -28,14 +28,14 @@ router.post('/login', async (req, res) => {
     const userDB = await User.findOne({ email: body.email })
     if (!userDB) {
       return res.status(400).json({
-        message: 'Email not found'
+        message: 'Email or Password wrong'
       })
     } 
 
     // Validating Password
     if (!bcrypt.compareSync(body.pass, userDB.pass)) {
       return res.status(400).json({
-        message: 'Wrong password '
+        message: 'Email or Password wrong'
       })
     }
 
