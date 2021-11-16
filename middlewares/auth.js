@@ -6,7 +6,7 @@ const verificarAuth = (req, res, next) => {
 
   console.log('Token on backend: ', token)
   jwt.verify(token, process.env.SECRETORPRIVATEKEY, (err, decoded) => {
-
+    
     if (err) {
       return res.status(401).json({
         message: 'Invalid user',
