@@ -18,7 +18,7 @@ const uploadImage = (req, res) => {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'no files were selected'
+                    message: 'No image was selected'
                 }
             })
         }

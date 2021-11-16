@@ -1,7 +1,6 @@
-const { Response } = require('express'); 
+// const { Response } = require('express'); 
 const bcrypt = require('bcrypt')
 const mailgun = require('mailgun-js')
-// const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.js');
 // const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
@@ -9,6 +8,7 @@ const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MA
 
 // hash Password
 const saltRounds = 10
+
 const { googleVerify } = require('../helpers/google-verify');
 
 const googleSignin = async (req, res = Response) => {

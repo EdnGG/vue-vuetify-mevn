@@ -2,162 +2,40 @@ import express from 'express'
 const router = express.Router()
 
 const { verificarAuth, verificarAdministrador } = require('../middlewares/auth')
-const { createTodo, log } = require('../controllers/todo.js')
-
-// Importing Todo model
-import Todo from '../models/todo.js'
+const { createTodo,
+        getTodo,
+        getTodos,
+        getPagination,
+        deleteTodo,
+        updateTodo,
+        updateDuedateTodo,
+        updateTodoDone
+} = require('../controllers/todo.js')
 
 // Adding a new todo
-router.post('/new-todo', verificarAuth, createTodo) //Este es?si
-/* Este funca? 
-router.post('/new-todo', verificarAuth, async (req, res) => {
-  // 'req' es lo que envias 'res' es lo que responde el servidor
-  const body = req.body
- 
-  body.userId = req.user
-  console.log('userId: ', body.userId)
-
-  try {
-    const notaDB = await Todo.create(body)
-    console.log('nota db ', notaDB)
-    // El status 200 esta por defecto en Express so no se nesesita mandar res.status(200).json(notaDB)
-    
-    res.json(notaDB)
-  } catch (error) {
-    return res.status(500).json({
-      mensaje: 'Something was wrong',
-      error: error
-    })
-  }
-})
-*/
+router.post('/new-todo', verificarAuth, createTodo)
 
 // Get con parametros
-router.get('/nota/:id', async (req, res) => {
-  /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
-  se almacena de esta forma porque con esa info vamos a filtrar
-  las notas por usuario
-  */
-  //  aqui el _id viene del token que se genera en ./middleware/auth.js
-  const _id = req.params.id
-  console.log('ID: ', _id)
-  try {
-    const notaDB = await Todo.findOne({ _id })
-    res.json(notaDB)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'somwthing was wrong on get using params',
-      error
-    })
-  }
-})
+router.get('/nota/:id', getTodo )
 
 // Get con todos los documentos
-router.get('/todos', verificarAuth, async (req, res) => {
-  // const _id = req.params.id
-  const userId = req.user._id
-  try {
-    const notasDB = await Todo.find({ userId })
-    res.json(notasDB)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'something was wrong getting all documents',
-      error
-    })
-  }
-})
+router.get('/todos', verificarAuth, getTodos )
 
 // Get con paginacion
-router.get('/nota', verificarAuth, async (req, res) => {
-  // const _id = req.params.id
-
-  const usuarioId = req.usuario._id
-  const limit = Number(req.query.limit) || 10
-  const skip = Number(req.query.skip) || 0
-
-  try {
-    const notaDB = await Todo.find({ usuarioId }).limit(limit).skip(skip)
-
-    // Contar documentos
-    const totalNotas = await Todo.find({ usuarioId }).countDocuments()
-
-    res.json({ notaDB, totalNotas })
-
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'something were wrong',
-      error
-    })
-  }
-})
+router.get('/nota', verificarAuth, getPagination)
 
 // Eliminar una nota
-router.delete('/nota/:id', async (req, res) => {
-  const _id = req.params.id
-  try {
-    const notaDB = await Todo.findByIdAndDelete({ _id })
-    if (!notaDB) {
-      return res.status(400).json({
-        mensaje: 'can not find the Id provided',
-        error
-      })
-    }
-    res.json(null)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'can not find the Id provided',
-      error
-    })
-  }
-})
+router.delete('/nota/:id', deleteTodo )
 
 // Put actualizar una nota
-router.put('/nota/:id', async (req, res) => {
-  const _id = req.params.id
-  const body = req.body
-  try {
-    await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'can not find the Id provided',
-      error
-    })
-  }
-})
+router.put('/nota/:id', updateTodo)
 
 // Put actualizar una nota en su duedate
-router.put('/nota/duedate/:id', async (req, res) => {
-  const _id = req.params.id
-  const body = req.body
-  try {
-    await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'can not find the Id provided',
-      error
-    })
-  }
-})
+router.put('/nota/duedate/:id', updateDuedateTodo )
 
 // Put actualizar una nota en su propieddad done
-router.put('/nota/done/:id', async (req, res) => {
-  const _id = req.params.id
-  const body = req.body
-  try {
-    await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
-  } catch (error) {
-    return res.status(400).json({
-      mensaje: 'can not find the Id provided',
-      error
-    })
-  }
-})
+router.put('/nota/done/:id', updateTodoDone)
 
-// Exportacion de router
-// export default router
-// esta forma de exportar es de node
+
 module.exports = router
 
