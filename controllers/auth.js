@@ -176,7 +176,7 @@ const forgotPassword = async (req, res = Response) => {
                 html: `
             <h2>Please click on the given link to reset your password</h2>
             
-            <a>${process.env.CLIENT_URL_CLOUD}reset-password/${formattingToken}</a>
+            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${formattingToken}</a>
             `
             }
 
