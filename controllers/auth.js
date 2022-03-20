@@ -108,8 +108,8 @@ const signup = async (req, res = Response) => {
     
       } catch (err) {
         return res.status(500).json({
-          message: 'Please fiil up all fields',
-          err
+          message: err.errors,
+        
         })
       }    
 }
@@ -167,13 +167,16 @@ const forgotPassword = async (req, res = Response) => {
             const token = jwt.sign({ _id: userDB._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' })
             const formattingToken = token.replace(/["."]+/g, '_')
 
+            // <a>${process.env.CLIENT_URL}reset-password/${formattingToken}</a> // Develop
+
             const data = {
                 from: `noreply@vuetify-todo.com`,
                 to: email,
                 subject: 'Reset password',
                 html: `
             <h2>Please click on the given link to reset your password</h2>
-            <a>${process.env.CLIENT_URL}/reset-password/${formattingToken}</a>
+            
+            <a>${process.env.CLIENT_URL_CLOUD}reset-password/${formattingToken}</a>
             `
             }
 
