@@ -167,7 +167,12 @@ const forgotPassword = async (req, res = Response) => {
             const token = jwt.sign({ _id: userDB._id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' })
             const formattingToken = token.replace(/["."]+/g, '_')
 
-            // <a>${process.env.CLIENT_URL}reset-password/${formattingToken}</a> // Develop
+            // <a href="${process.env.CLIENT_URL}reset-password/${formattingToken}">
+            // Click here to reset your password
+            // </a> // Develop
+            // <a href="${process.env.CLIENT_URL_CLOUD}reset-password/${formattingToken}">
+            // Click here to reset your password
+            // </a> // Production
 
             const data = {
                 from: `noreply@vuetify-todo.com`,
@@ -176,7 +181,9 @@ const forgotPassword = async (req, res = Response) => {
                 html: `
             <h2>Please click on the given link to reset your password</h2>
             
-            <a>${process.env.CLIENT_URL_CLOUD}/reset-password/${formattingToken}</a>
+            <a href="${process.env.CLIENT_URL_CLOUD}/reset-password/${formattingToken}">
+            Click here to reset your password
+            </a> 
             `
             }
 
