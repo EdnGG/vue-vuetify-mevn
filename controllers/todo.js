@@ -132,8 +132,9 @@ const updateTodoDone = async (req, res) => {
   const _id = req.params.id
   const body = req.body
   try {
-    await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
+// Checar aqui si el usuario es el dueño de la nota
+    const user = await Todo.findByIdAndUpdate(_id, body, { new: true })
+    res.json({user})
   } catch (error) {
     return res.status(400).json({
       mensaje: 'can not find the Id provided',
