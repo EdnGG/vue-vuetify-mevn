@@ -9,7 +9,8 @@ const { createTodo,
         deleteTodo,
         updateTodo,
         updateDuedateTodo,
-        updateTodoDone
+        updateTodoDone,
+        updateList
 } = require('../controllers/todo.js')
 
 // Adding a new todo
@@ -35,6 +36,9 @@ router.put('/nota/duedate/:id', updateDuedateTodo )
 
 // Put actualizar una nota en su propieddad done
 router.put('/nota/done/:id', updateTodoDone)
+
+// Put actualizar el orden de la lista de notas
+router.put('/nota/update-list/:id', updateList)
 
 
 module.exports = router

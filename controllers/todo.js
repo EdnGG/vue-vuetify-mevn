@@ -99,16 +99,36 @@ const deleteTodo = async (req, res) => {
     })
   }
 }
+// 
+const updateList = async (req, res) => {
+  // const _id = req.params
+  const body = req.body
+  // _id y body llegan undefined
+  // console.log('_id: ', _id)
+  console.log('body: ', body)
+  try {
+    // necesito encontrar el metodo correcto
+    await Todo.update(body)
+    res.json( { message: 'List updated' } )
+  } catch (error) {
+    return res.status(400).json({
+      // Error Aqui
+      mensaje: 'can not find the Id provided', 
+      error
+    })
+  }
+}
 
+// 
 const updateTodo = async (req, res) => {
   const _id = req.params.id
   const body = req.body
   try {
     await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
+    res.json({ message: 'Todo updated' })
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'can not find the Id provided', 
+      mensaje: 'can not find the Id provided on update todo', 
       error
     })
   }
@@ -119,10 +139,10 @@ const updateDuedateTodo = async (req, res) => {
   const body = req.body
   try {
     await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json(null)
+    res.json({ message: 'Duedate updated' })
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'can not find the Id provided',
+      mensaje: 'can not find the Id provided updtaing duedate',
       error
     })
   }
@@ -134,10 +154,10 @@ const updateTodoDone = async (req, res) => {
   try {
 // Checar aqui si el usuario es el dueño de la nota
     const user = await Todo.findByIdAndUpdate(_id, body, { new: true })
-    res.json({user})
+    res.json({ message: 'Todo updated' })
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'can not find the Id provided',
+      mensaje: 'can not find the Id provided on update todo done',
       error
     })
   }
@@ -151,5 +171,6 @@ module.exports = {
   deleteTodo,
   updateTodo,
   updateDuedateTodo,
-  updateTodoDone
+  updateTodoDone,
+  updateList
 }
