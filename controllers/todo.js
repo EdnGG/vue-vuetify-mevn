@@ -163,14 +163,4 @@ export const updateTodoDone = async (req, res) => {
   }
 }
 
-// module.exports = {
-//   createTodo,
-//   getTodo,
-//   getTodos,
-//   getPagination,
-//   deleteTodo,
-//   updateTodo,
-//   updateDuedateTodo,
-//   updateTodoDone,
-//   updateList
-// }
+

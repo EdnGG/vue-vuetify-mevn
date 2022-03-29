@@ -22,7 +22,7 @@ const userSchema = new Schema({
   resetLink: { type: String, default: '' },
   google: {type: Boolean, default: false},
   image: { type: String, required: false },
-  todos: { type: String, required: false } // relacion con todos
+  todos: { type: String, required: false } // relacion con sus tareas
 })
 
 /* { PATH } Sera reemplazado por el campo con el atributo 'unique' declarado

@@ -11,7 +11,7 @@ const saltRounds = 10
 
 const { googleVerify } = require('../helpers/google-verify');
 
-const googleSignin = async (req, res = Response) => {
+export const googleSignin = async (req, res = Response) => {
 
     // id_token from google
     const id_token = req.body.id_token;
@@ -66,7 +66,7 @@ const googleSignin = async (req, res = Response) => {
     }
 }
 
-const signup = async (req, res = Response) => {
+export const signup = async (req, res = Response) => {
     const body = {
         name: req.body.name,
         email: req.body.email,
@@ -114,7 +114,7 @@ const signup = async (req, res = Response) => {
       }    
 }
 
-const login = async (req, res = Response) => {
+export const login = async (req, res = Response) => {
     const body = req.body
   try {
     // Validating email
@@ -150,7 +150,7 @@ const login = async (req, res = Response) => {
   }
 }
 
-const forgotPassword = async (req, res = Response) => {
+export const forgotPassword = async (req, res = Response) => {
     const { email } = req.body;
     console.log('email: ', email)
 
@@ -212,7 +212,7 @@ const forgotPassword = async (req, res = Response) => {
 
 }
 
-const resetPassword = async (req, res = Response) => {
+export const resetPassword = async (req, res = Response) => {
     console.log('params: ', req.params)
     console.log('body: ', req.body)
 
@@ -262,10 +262,10 @@ const resetPassword = async (req, res = Response) => {
 
 }
 
-module.exports = {
-    googleSignin,
-    forgotPassword,
-    resetPassword,
-    signup,
-    login
-}
+// module.exports = {
+//     googleSignin,
+//     forgotPassword,
+//     resetPassword,
+//     signup,
+//     login
+// }
