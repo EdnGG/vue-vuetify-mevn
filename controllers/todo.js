@@ -1,7 +1,7 @@
 // Importing Todo model
 import Todo from '../models/todo.js'
 
-const createTodo = async (req, res) => {
+export const createTodo = async (req, res) => {
 
   // 'req' es lo que envias 'res' es lo que responde el servidor
   const body = req.body
@@ -28,7 +28,7 @@ const createTodo = async (req, res) => {
   }
 }
 
-const getTodo = async (req, res) => {
+export const getTodo = async (req, res) => {
   /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
   se almacena de esta forma porque con esa info vamos a filtrar
   las notas por usuario
@@ -47,7 +47,7 @@ const getTodo = async (req, res) => {
   }
 }
 
-const getTodos = async (req, res) => {
+export const getTodos = async (req, res) => {
   // const _id = req.params.id
   const userId = req.user._id
   try {
@@ -61,7 +61,7 @@ const getTodos = async (req, res) => {
   }
 }
 
-const getPagination = async (req, res) => {
+export const getPagination = async (req, res) => {
   // const _id = req.params.id
 
   const usuarioId = req.usuario._id
@@ -81,7 +81,7 @@ const getPagination = async (req, res) => {
   }
 }
 
-const deleteTodo = async (req, res) => {
+export const deleteTodo = async (req, res) => {
   const _id = req.params.id
   try {
     const notaDB = await Todo.findByIdAndDelete({ _id })
@@ -100,15 +100,14 @@ const deleteTodo = async (req, res) => {
   }
 }
 // 
-const updateList = async (req, res) => {
-  // const _id = req.params
-  const body = req.body
-  // _id y body llegan undefined
+export const updateList = async (req, res) => {
+  const { body } = req
   // console.log('_id: ', _id)
   console.log('body: ', body)
   try {
-    // necesito encontrar el metodo correcto
-    await Todo.update(body)
+    await Promise.all(
+      [ ...body ].map( async (item) => await Todo.findByIdAndUpdate( item._id, item ))
+    )
     res.json( { message: 'List updated' } )
   } catch (error) {
     return res.status(400).json({
@@ -120,21 +119,22 @@ const updateList = async (req, res) => {
 }
 
 // 
-const updateTodo = async (req, res) => {
+export const updateTodo = async (req, res) => {
   const _id = req.params.id
   const body = req.body
+  console.log('body: ' ,body)
   try {
     await Todo.findByIdAndUpdate(_id, body, { new: true })
     res.json({ message: 'Todo updated' })
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'can not find the Id provided on update todo', 
+      mensaje: "Can't find the Id provided on update todo", 
       error
     })
   }
 }
 
-const updateDuedateTodo = async (req, res) => {
+export const updateDuedateTodo = async (req, res) => {
   const _id = req.params.id
   const body = req.body
   try {
@@ -148,7 +148,7 @@ const updateDuedateTodo = async (req, res) => {
   }
 }
 
-const updateTodoDone = async (req, res) => {
+export const updateTodoDone = async (req, res) => {
   const _id = req.params.id
   const body = req.body
   try {
@@ -163,14 +163,14 @@ const updateTodoDone = async (req, res) => {
   }
 }
 
-module.exports = {
-  createTodo,
-  getTodo,
-  getTodos,
-  getPagination,
-  deleteTodo,
-  updateTodo,
-  updateDuedateTodo,
-  updateTodoDone,
-  updateList
-}
+// module.exports = {
+//   createTodo,
+//   getTodo,
+//   getTodos,
+//   getPagination,
+//   deleteTodo,
+//   updateTodo,
+//   updateDuedateTodo,
+//   updateTodoDone,
+//   updateList
+// }
