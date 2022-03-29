@@ -51,7 +51,7 @@ export const getTodos = async (req, res) => {
   // const _id = req.params.id
   const userId = req.user._id
   try {
-    const notasDB = await Todo.find({ userId })
+    const notasDB = await Todo.find({ userId }).sort({ index: 1 })
     res.json(notasDB)
   } catch (error) {
     return res.status(400).json({
