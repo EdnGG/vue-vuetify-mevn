@@ -2,10 +2,8 @@
 import Todo from '../models/todo.js'
 
 export const createTodo = async (req, res) => {
-
   // 'req' es lo que envias 'res' es lo que responde el servidor
-  const body = req.body
-
+  const { body } = req
   //     /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
   //     se almacena de esta forma porque con esa info vamos a filtrar
   //     las notas por usuario
@@ -13,35 +11,28 @@ export const createTodo = async (req, res) => {
   //     //  aqui el _id viene del token que se genera en ./middleware/auth.js
 
   body.userId = req.user
-  console.log('userId: ', body.userId)
   try {
-    console.log('body: ', body)
     const notaDB = await Todo.create(body)
     console.log('nota db ', notaDB)
     // El status 200 esta por defecto en Express so no se nesesita mandar res.status(200).json(notaDB)
     res.json(notaDB)
   } catch (error) {
     return res.status(500).json({
-      mensaje: ' wrong',
+      mensaje: 'something was wrong creating the document',
       error: error
     })
   }
 }
 
 export const getTodo = async (req, res) => {
-  /* 'req.usuario._id' tiene el token que se lee desde la autenticacion.js
-  se almacena de esta forma porque con esa info vamos a filtrar
-  las notas por usuario
-  */
-  //  aqui el _id viene del token que se genera en ./middleware/auth.js
-  const _id = req.params.id
+  const { _id } = req.params
   console.log('ID: ', _id)
   try {
     const notaDB = await Todo.findOne({ _id })
     res.json(notaDB)
   } catch (error) {
     return res.status(400).json({
-      mensaje: 'Invalid user',
+      mensaje: 'Invalid userId provided',
       error
     })
   }
@@ -52,6 +43,7 @@ export const getTodos = async (req, res) => {
   const userId = req.user._id
   try {
     const notasDB = await Todo.find({ userId }).sort({ index: 1 })
+    console.log('notasDB: ', notasDB)
     res.json(notasDB)
   } catch (error) {
     return res.status(400).json({
@@ -102,7 +94,6 @@ export const deleteTodo = async (req, res) => {
 // 
 export const updateList = async (req, res) => {
   const { body } = req
-  // console.log('_id: ', _id)
   console.log('body: ', body)
   try {
     await Promise.all(
@@ -111,7 +102,6 @@ export const updateList = async (req, res) => {
     res.json( { message: 'List updated' } )
   } catch (error) {
     return res.status(400).json({
-      // Error Aqui
       mensaje: 'can not find the Id provided', 
       error
     })
