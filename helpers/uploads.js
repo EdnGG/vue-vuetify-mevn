@@ -1,18 +1,18 @@
-// CLOUDINARY
-const cloudinary = require('cloudinary').v2;
+// const cloudinary = require('cloudinary').v2;
+import { v2 as cloudinary } from 'cloudinary' // ES6
 cloudinary.config(process.env.CLOUDINARY_URL)
 
-const User = require('../models/user.js');
+import User from '../models/user.js';
 
-function uploadImageCloudinary(_id, image, res) {
-    cloudinary.uploader.upload(image, { tags: 'basic_sample' }, function (error, result) {
+const  uploadImageCloudinary = async (_id, image, res)  => {
+    await cloudinary.uploader.upload(image, { tags: 'basic_sample' }, function (error, result) {
         if (error) {
-            console.log('Error al subir a cloudinary', error)
+            console.log('Error al subir a cloudinary', error.message)
         }
         else {
             User.findById(_id, (err, userDB) => {
                 if (err) {
-                    console.log('Error al relacionar usuario')
+                    console.log('Error al relacionar usuario:', err)
                 } else {
                     userDB.image = result.secure_url
                     userDB.save((err, newUserDB) => {

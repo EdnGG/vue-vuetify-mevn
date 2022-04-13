@@ -1,17 +1,8 @@
-const express = require('express')
-const router = express.Router()
+import { uploadImageCloudinary } from '../helpers/uploads'
 
-// CLOUDINARY
-const cloudinary = require('cloudinary').v2;
-cloudinary.config(process.env.CLOUDINARY_URL)
-
-const User = require('../models/user.js');
-const { uploadImageCloudinary, uploadImageHelper } = require('../helpers/uploads')
-
-const uploadImage = (req, res) => {
+const uploadImage = (req, res) => { 
 
     const _id = req.params.id
-    console.log('req.files: ', req.files)
 
     try {
         if (!req.files) {
@@ -23,10 +14,10 @@ const uploadImage = (req, res) => {
             })
         }
 
-        let archivo = req.files.image
+        let image = req.files.image
 
-        // separara el nombre del archivo en cuanto encuentre un punto '.'
-        let nombreArchivoCortado = archivo.name.split('.')
+        // separara el nombre del image en cuanto encuentre un punto '.'
+        let nombreArchivoCortado = image.name.split('.')
         // Obtenemos la ultima posicion del arreglo
         let extension = nombreArchivoCortado[nombreArchivoCortado.length - 1]
 
@@ -48,10 +39,8 @@ const uploadImage = (req, res) => {
 
         uploadImageCloudinary(_id, filePath, res)
 
-        // uploadImage(archivo, extension)
-
     } catch (err) {
-        console.log('Error dentro de la peticion: ', err)
+        console.log('Error dentro de la peticion: ', err.message)
     }
 
 }
