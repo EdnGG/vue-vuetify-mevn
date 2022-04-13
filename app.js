@@ -19,7 +19,7 @@ const options = {
 }
 mongoose.connect(URI_CLOUD, options).then(
   () => {
-    console.log('Connected to Mongo DB')
+    console.log(`Succesfully connected to Mongo DB `)
   }, err => {
     err
   } 
@@ -46,7 +46,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use( require('./routes/todo') )
 app.use( require('./routes/user') )
 app.use( require('./routes/upload'))
-// app.use('/api/login', require('./routes/login'))
 
 // Midleware para vue.js router modo history
 const history = require('connect-history-api-fallback')
@@ -59,6 +58,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.set('Port', process.env.PORT || 3000)
 
 app.listen(app.get('Port'), () => {
-  console.log('Listeninig on port: ', app.get('Port') )
+  console.log(`Server listeninig on port: ${app.get('Port')}`)
 })
 
