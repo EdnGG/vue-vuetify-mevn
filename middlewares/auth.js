@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
 const verificarAuth = (req, res, next) => {
   const token = req.get('token')
