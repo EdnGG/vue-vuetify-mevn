@@ -6,7 +6,7 @@ const User = require('../models/user.js');
 // const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN })
 const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN_CLOUD })
 
-// hash Password
+// hash Password 
 const saltRounds = 10
 
 const { googleVerify } = require('../helpers/google-verify');
