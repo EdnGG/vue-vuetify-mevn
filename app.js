@@ -9,15 +9,15 @@ import fileUpload from "express-fileupload";
 
 const app = express();
 
-// const URI_LOCAL = process.env.URI_LOCAL
-const URI_CLOUD = process.env.URI_CLOUD;
+const URI_LOCAL = process.env.URI_LOCAL;
+// const URI_CLOUD = process.env.URI_CLOUD;
 
 const options = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
 };
-mongoose.connect(URI_CLOUD, options).then(
+mongoose.connect(URI_LOCAL, options).then(
   () => {
     console.log(`Succesfully connected to Mongo DB `);
   },
@@ -54,7 +54,7 @@ app.use(history());
 /*
 El 'path' nos sirve pra ubicarnos dentro del servidor
 */
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 app.set("Port", process.env.PORT || 3000);
 
